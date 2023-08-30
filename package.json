@@ -2,11 +2,10 @@
   "name": "@dykarohora/obshyper",
   "version": "1.0.0",
   "description": "Obshyper is a transpiler that converts Obsidian markdown to HTML.",
-    "repository": {
+  "repository": {
     "type": "git",
-
     "url": "https://github.com/dykarohora/obshyper.git"
-    },
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +28,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@dykarohora/funser": "^1.0.1"
+    "@dykarohora/funser": "^1.0.5"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",

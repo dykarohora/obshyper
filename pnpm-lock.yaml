@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@dykarohora/funser':
-    specifier: ^1.0.1
-    version: 1.0.1
+    specifier: ^1.0.5
+    version: 1.0.5
 
 devDependencies:
   '@types/jest':
@@ -401,8 +401,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
 
-  /@dykarohora/funser@1.0.1:
-    resolution: {integrity: sha512-wPaQnCnDwUaGGHLjEVxFNElxQUz2okfoq5fPn/F9cGUB5cHfQGivWGffk/ozSL8gbkWJpQeBkkLpJS1dSh3U4Q==, tarball: https://npm.pkg.github.com/download/@dykarohora/funser/1.0.1/27e48e2e1450d8ffe4a3d827f4ae43611b295231}
+  /@dykarohora/funser@1.0.5:
+    resolution: {integrity: sha512-pfFOVxSbXCk1DtvjogwtHvTCuaEpsEEz9Ecfc1bf7fB5L7/IOupyp8+1Mgp7to9eMfoBjxZ5hfOVfJjUY7oohA==, tarball: https://npm.pkg.github.com/download/@dykarohora/funser/1.0.5/8bf11163fe6a80c7c48579ae8f1a8ae6d89a8e47}
     engines: {node: '>=18.0.0'}
     requiresBuild: true
     dev: false
