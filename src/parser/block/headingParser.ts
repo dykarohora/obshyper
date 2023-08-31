@@ -1,8 +1,6 @@
 import type { Parser } from '@dykarohora/funser/types'
 import {
-	eof,
 	space,
-	newline,
 	anyChar,
 	anyCharOf,
 	seq,
@@ -11,42 +9,37 @@ import {
 	map,
 	repeat,
 	repeatTill,
-	lookAhead,
 } from '@dykarohora/funser'
 import type { Heading } from '../../types/index.js'
+import { lineEndParser } from '../util/lineEndParser.js'
+import { constVoid } from '../util/constVoid.js'
 
-const preSpace = pipe(
+const preSpace: Parser<Array<' '>> = pipe(
 	anyCharOf(' '),
 	repeat({ min: 0, max: 3 })
 )
 
-const poundSignSequence = pipe(
+const poundSignSequence: Parser<Array<'#'>> = pipe(
 	anyCharOf('#'),
 	repeat({ min: 1, max: 6 }),
 )
 
-const lineEnd = pipe(
-	newline,
-	or(eof)
-)
-
-const noTitle = pipe(
+const noTitle: Parser<void> = pipe(
 	space,
-	repeat(),
-	seq(lineEnd),
-	map(() => undefined)
+	repeatTill(lineEndParser),
+	map(constVoid)
 )
 
-const withTitle = pipe(
+const withTitle: Parser<string> = pipe(
 	space,
 	repeat({ min: 1 }),
 	seq(
 		pipe(
 			anyChar,
-			repeat(),
-			lookAhead(lineEnd)
+			repeatTill(lineEndParser)
 		)
 	),
+	map(([_, content]) => content.join('').trim())
 )
 
 export const headingParser: Parser<Heading> =
@@ -70,9 +63,7 @@ export const headingParser: Parser<Heading> =
 				}
 			}
 
-			const [, title] = content
-			const trimmedTitle = title.join('').trim().replace(/(?<=\s)#+$/, '').trim()
-
+			const trimmedTitle = content.replace(/(?<=\s)#+$/, '').trim()
 			return trimmedTitle === '' || [...trimmedTitle].every(char => char === '#')
 				? {
 					type: 'heading',

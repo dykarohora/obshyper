@@ -1,7 +1,6 @@
-/* eslint-disable no-useless-escape */
 import { headingParser } from './headingParser.js'
-import { anyChar, anyCharOf, noCharOf, type ParserOutput, pipe, seq } from '@dykarohora/funser'
-import { type Heading } from '../../types/index.js'
+import type { ParserOutput } from '@dykarohora/funser'
+import type { Heading } from '../../types/index.js'
 
 describe('headingParser', () => {
 	it.each([
