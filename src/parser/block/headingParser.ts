@@ -1,17 +1,17 @@
 import type { Parser } from '@dykarohora/funser/types'
 import {
-	anyCharOf,
 	eof,
-	lookAhead,
 	space,
-	map,
 	newline,
-	noCharOf,
+	anyChar,
+	anyCharOf,
+	seq,
 	or,
-	orParser,
 	pipe,
+	map,
 	repeat,
-	seq
+	repeatTill,
+	lookAhead,
 } from '@dykarohora/funser'
 import type { Heading } from '../../types/index.js'
 
@@ -25,72 +25,61 @@ const poundSignSequence = pipe(
 	repeat({ min: 1, max: 6 }),
 )
 
-// コンテンツなし
-// 以下のOR
-// 1. 改行
-// 2. EOF
-// 3. スペースかタブの連続からの改行orEOF
+const lineEnd = pipe(
+	newline,
+	or(eof)
+)
 
 const noTitle = pipe(
 	space,
 	repeat(),
-	seq(orParser(newline, eof)),
-	map(_ => undefined)
+	seq(lineEnd),
+	map(() => undefined)
 )
-
-// コンテンツあり
-// 以下のSEQ
-// 1. スペースかタブの連続
-// 2. 改行を除く任意の文字の連続
-// 3. 改行orEOF
-
-const title = pipe(
-	noCharOf('\n'),
-	repeat()
-)
-
-const end = orParser(newline, eof)
 
 const withTitle = pipe(
 	space,
 	repeat({ min: 1 }),
-	seq(title, end),
+	seq(
+		pipe(
+			anyChar,
+			repeat(),
+			lookAhead(lineEnd)
+		)
+	),
 )
-
-const content = orParser(withTitle, noTitle)
-
-
-const trimTitle = (title: string) => title.trim().replace(/(?<=\s)#+$/, '').trim()
 
 export const headingParser: Parser<Heading> =
 	pipe(
 		preSpace,
-		seq(poundSignSequence, content),
-		map(([_, poundSignSequence, title]) => {
+		seq(
+			poundSignSequence,
+			pipe(
+				withTitle,
+				or(noTitle)
+			)
+		),
+		map(([, poundSignSequence, content]) => {
 			const depth = poundSignSequence.length as 1 | 2 | 3 | 4 | 5 | 6
 
-			if (title) {
-				const [_, b, __] = title
-
-				const trimmedTitle = trimTitle(b.join('')).trim()
-
-				if (trimmedTitle === '') {
-					return {
-						type: 'heading',
-						depth,
-						children: []
-					}
-				}
-
-				if ([...trimmedTitle].every(char => char === '#')) {
-					return {
-						type: 'heading',
-						depth,
-						children: []
-					}
-				}
-
+			if (content === undefined) {
 				return {
+					type: 'heading',
+					depth,
+					children: []
+				}
+			}
+
+			const [, title] = content
+			const trimmedTitle = title.join('').trim().replace(/(?<=\s)#+$/, '').trim()
+
+			return trimmedTitle === '' || [...trimmedTitle].every(char => char === '#')
+				? {
+					type: 'heading',
+					depth,
+					children: []
+				}
+				: {
 					type: 'heading',
 					depth,
 					children: [{
@@ -98,15 +87,5 @@ export const headingParser: Parser<Heading> =
 						value: trimmedTitle
 					}]
 				}
-			}
-
-
-			return {
-				type: 'heading',
-				depth,
-				children: []
-			}
-
 		})
 	)
-

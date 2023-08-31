@@ -28,7 +28,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@dykarohora/funser": "^1.0.5"
+    "@dykarohora/funser": "^1.0.7"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",
