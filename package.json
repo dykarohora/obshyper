@@ -19,7 +19,7 @@
     "build": "tsc --build --clean & tsc -p ./tsconfig.build.json",
     "lint": "eslint --ext .ts,.tsx",
     "lint:fix": "eslint --ext .ts,.tsx --fix",
-    "test": "jest"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
   },
   "keywords": [],
   "author": "d-yama",
@@ -28,7 +28,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@dykarohora/funser": "^1.0.7"
+    "@dykarohora/funser": "^1.0.10"
   },
   "devDependencies": {
     "@types/jest": "^29.5.4",

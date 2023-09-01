@@ -1,5 +1,5 @@
-import { headingParser } from './headingParser.js'
 import type { ParserOutput } from '@dykarohora/funser'
+import { headingParser } from './headingParser.js'
 import type { Heading } from '../../types/index.js'
 
 describe('headingParser', () => {

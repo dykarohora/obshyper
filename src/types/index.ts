@@ -9,6 +9,11 @@ export type Text = {
 	value: string
 }
 
+export type Strong = {
+	type: 'strong'
+	children: InlineContent[]
+}
+
 
 export type BlockContent =
 	| Heading
