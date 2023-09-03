@@ -402,7 +402,7 @@ packages:
     dev: true
 
   /@dykarohora/funser@1.0.13:
-    resolution: {integrity: sha512-L4vVrPv74FUkWwZymL+P/EoYvQhBkPHxcP5SrLiW1vA7UZeBZTtBeGklXazAsG/kaz/eSMG35vw7SvpTN336dw==, tarball: https://npm.pkg.github.com/download/@dykarohora/funser/1.0.13/deff4a8ce6f0312103545c826d6bcdce9802223a}
+    resolution: {integrity: sha512-dOIo+mr7quM4J+80ZENXYwFhfZ/Et9Wu28tv+EYXChl+1Z7iM6nVfQYky7AHbbi698Jz6w0OeCqNKDI6iiPWWQ==, tarball: https://npm.pkg.github.com/download/@dykarohora/funser/1.0.13/73f8d45122b018c8c4c9a2fcf3e39ee4dfcc3604}
     engines: {node: '>=18.0.0'}
     requiresBuild: true
     dev: false
