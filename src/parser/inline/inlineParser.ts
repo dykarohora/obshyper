@@ -3,10 +3,12 @@ import type { InlineContent } from '../../types/index.js'
 import { eof, map, orParser, pipe, repeatTill } from '@dykarohora/funser'
 import { codeSpansParser } from './codeSpansParser.js'
 import { textParser } from './textParser.js'
+import { escapeParser } from './escapeParser.js'
 
 export const inlineParser: Parser<InlineContent[]> =
 	pipe(
 		orParser(
+			escapeParser,
 			codeSpansParser,
 			textParser
 		),

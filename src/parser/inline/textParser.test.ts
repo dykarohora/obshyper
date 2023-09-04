@@ -5,7 +5,7 @@ import type { Text } from '../../types/index.js'
 // TODO テストケースの充実が必要
 
 describe('textParser', () => {
-	it('入力が"hello"のとき、インラインテキストとしてパースに成功する', () => {
+	it('入力が「hello」のとき、インラインテキストとしてパースに成功する', () => {
 		const input = 'hello'
 		const result = textParser({ input })
 
@@ -18,7 +18,7 @@ describe('textParser', () => {
 		expect(result).toEqual(expected)
 	})
 
-	it('入力が"`hello"のとき、インラインテキストとしてパースに成功する', () => {
+	it('入力が「`hello」のとき、インラインテキストとしてパースに成功する', () => {
 		const input = '`hello'
 		const result = textParser({ input })
 
@@ -31,7 +31,7 @@ describe('textParser', () => {
 		expect(result).toEqual(expected)
 	})
 
-	it('入力が"hel*lo"のとき、インラインテキストとしてパースに成功する', () => {
+	it('入力が「hel*lo」のとき、インラインテキストとしてパースに成功する', () => {
 		const input = 'hel*lo'
 		const result = textParser({ input })
 
@@ -39,6 +39,19 @@ describe('textParser', () => {
 			type: 'Success',
 			value: { type: 'text', value: 'hel' },
 			state: { input, position: 3 }
+		}
+
+		expect(result).toEqual(expected)
+	})
+
+	it('入力が「\\A」のとき、インラインテキストとしてパースに成功する', () => {
+		const input = '\\A'
+		const result = textParser({ input })
+
+		const expected: ParserOutput<Text> = {
+			type: 'Success',
+			value: { type: 'text', value: '\\A' },
+			state: { input, position: 2 }
 		}
 
 		expect(result).toEqual(expected)

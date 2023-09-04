@@ -17,6 +17,12 @@ describe('inlineParser', () => {
 				{ type: 'text', value: ', world ' },
 				{ type: 'codeSpans', value: '!!' },
 			]
+		],
+		[
+			'hello, \\*world\\*!!',
+			[
+				{ type: 'text', value: 'hello, *world*!!' },
+			]
 		]
 	])('入力が%sのとき、パースに成功する', (input, expected) => {
 		const output = inlineParser({ input })
