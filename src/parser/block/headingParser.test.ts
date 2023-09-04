@@ -110,9 +110,9 @@ describe('headingParser', () => {
 	})
 
 	it.each([
-		['### foo \\###', 'foo \\###'],
-		['### foo #\\##', 'foo #\\##'],
-		['### foo \\#', 'foo \\#'],
+		['### foo \\###', 'foo ###'],
+		['### foo #\\##', 'foo ###'],
+		['### foo \\#', 'foo #'],
 	])('#がエスケープされている場合は終了シーケンスとはみなされない。入力 %s', (input, content) => {
 		const result = headingParser({ input })
 		const expected: ParserOutput<Heading> = {
@@ -122,7 +122,6 @@ describe('headingParser', () => {
 		}
 
 		expect(result).toEqual(expected)
-		// TODO エスケープシーケンスのパースが必要
 	})
 
 	it.each([
@@ -140,6 +139,7 @@ describe('headingParser', () => {
 
 		expect(result).toEqual(expected)
 	})
+
 	//
 	// it('見出しは段落を中断させることができる', () => {
 	// 	const input = '****\n## foo\n****'

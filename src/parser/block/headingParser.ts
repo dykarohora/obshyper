@@ -4,15 +4,16 @@ import {
 	anyChar,
 	anyCharOf,
 	seq,
-	or,
 	pipe,
 	map,
 	repeat,
 	repeatTill,
+	orParser,
 } from '@dykarohora/funser'
 import type { Heading } from '../../types/index.js'
 import { lineEndParser } from '../util/lineEndParser.js'
 import { constVoid } from '../util/constVoid.js'
+import { inlineParser } from '../inline/inlineParser.js'
 
 const preSpace: Parser<Array<' '>> = pipe(
 	anyCharOf(' '),
@@ -24,13 +25,13 @@ const poundSignSequence: Parser<Array<'#'>> = pipe(
 	repeat({ min: 1, max: 6 }),
 )
 
-const noTitle: Parser<void> = pipe(
+const noContent: Parser<void> = pipe(
 	space,
 	repeatTill(lineEndParser),
 	map(constVoid)
 )
 
-const withTitle: Parser<string> = pipe(
+const withContent: Parser<string> = pipe(
 	space,
 	repeat({ min: 1 }),
 	seq(
@@ -47,36 +48,32 @@ export const headingParser: Parser<Heading> =
 		preSpace,
 		seq(
 			poundSignSequence,
-			pipe(
-				withTitle,
-				or(noTitle)
-			)
+			orParser(withContent, noContent)
 		),
-		map(([, poundSignSequence, content]) => {
+		map(([, poundSignSequence, contentStr]) => {
 			const depth = poundSignSequence.length as 1 | 2 | 3 | 4 | 5 | 6
+			const contentParseResult =
+				pipe(
+					inlineParser,
+					map(
+						(inlines) =>
+							inlines.length === 1 &&
+							inlines[0]?.type === 'text' &&
+							[...inlines[0].value].every(char => char === '#')
+								? []
+								: inlines
+					)
+				)
+				({ input: contentStr?.replace(/(?<=\s)#+$/, '').trim() ?? '' })
 
-			if (content === undefined) {
-				return {
-					type: 'heading',
-					depth,
-					children: []
-				}
+			if (contentParseResult.type === 'Failure') {
+				throw new Error(`[Bug] inlineParser failed: ${contentParseResult.reason}`)
 			}
 
-			const trimmedTitle = content.replace(/(?<=\s)#+$/, '').trim()
-			return trimmedTitle === '' || [...trimmedTitle].every(char => char === '#')
-				? {
-					type: 'heading',
-					depth,
-					children: []
-				}
-				: {
-					type: 'heading',
-					depth,
-					children: [{
-						type: 'text',
-						value: trimmedTitle
-					}]
-				}
+			return {
+				type: 'heading',
+				depth,
+				children: contentParseResult.value
+			}
 		})
 	)
