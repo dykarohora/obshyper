@@ -19,9 +19,10 @@ export type Strong = {
 	children: InlineContent[]
 }
 
-
 export type BlockContent =
 	| Heading
 
 export type InlineContent =
 	| Text
+	| CodeSpans
+	| Strong
