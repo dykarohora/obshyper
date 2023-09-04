@@ -1,6 +1,6 @@
 import { codeSpansParser } from './codeSpansParser.js'
-import { lookBehind, noCharOf, not, type ParserOutput, pipe, seq, string } from '@dykarohora/funser'
-import { type CodeSpans } from '../../types/index.js'
+import type { ParserOutput } from '@dykarohora/funser'
+import type { CodeSpans } from '../../types/index.js'
 
 describe('CodeSpansParser', () => {
 	it.each([

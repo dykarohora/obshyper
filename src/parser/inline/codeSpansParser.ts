@@ -18,15 +18,25 @@ const backQuotes = pipe(
 	repeat({ min: 1 })
 )
 
+const format = (value: string[]) => {
+	const content = value.join('').replace(/\n/g, ' ')
+	const hasNonSpaceChars = /[^ ]/.test(content)
+	const hasSpaceCharsOnBothEnds = content.startsWith(' ') && content.endsWith(' ')
+
+	return hasNonSpaceChars && hasSpaceCharsOnBothEnds
+		? content.substring(1, content.length - 1)
+		: content
+}
+
 export const codeSpansParser: Parser<CodeSpans> =
 	({ input, position = 0 }) => {
-		const output = backQuotes({ input, position })
+		const prefixParseResult = backQuotes({ input, position })
 
-		if (output.type === 'Failure') {
-			return output
+		if (prefixParseResult.type === 'Failure') {
+			return prefixParseResult
 		}
 
-		const prefix = output.value.join('')
+		const prefix = prefixParseResult.value.join('')
 
 		const postfixParser =
 			pipe(
@@ -36,33 +46,14 @@ export const codeSpansParser: Parser<CodeSpans> =
 				map(([[tail, _], __]) => tail)
 			)
 
-		const parser = pipe(
+		return pipe(
 			anyChar,
 			repeatTill(postfixParser),
-		)
-
-		const output2 = parser(output.state)
-
-		if (output2.type === 'Failure') {
-			return {
-				...output2,
-				state: { input, position }
-			}
-		}
-
-		let content = output2.value.join('').replace(/\n/g, ' ')
-		const hasNonSpaceChars = /[^ ]/.test(content)
-		const hasSpaceCharsOnBothEnds = content.startsWith(' ') && content.endsWith(' ')
-		if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
-			content = content.substring(1, content.length - 1)
-		}
-
-		return {
-			type: 'Success',
-			value: {
-				type: 'codeSpans',
-				value: content
-			},
-			state: output2.state
-		}
+			map(
+				(value) => ({
+					type: 'codeSpans' as const,
+					value: format(value)
+				})
+			)
+		)(prefixParseResult.state)
 	}
