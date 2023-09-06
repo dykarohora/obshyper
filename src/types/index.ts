@@ -14,6 +14,13 @@ export type CodeSpans = {
 	value: string
 }
 
+export type Link = {
+	type: 'link'
+	url: string
+	title?: string
+	children: InlineContent[]
+}
+
 export type Strong = {
 	type: 'strong'
 	children: InlineContent[]
