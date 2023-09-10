@@ -189,6 +189,7 @@ describe('linkParser', () => {
 		}
 
 		expect(output.value).toEqual(expected)
+		expect(output.state.position).toEqual(input.length)
 	})
 
 	it.each([
@@ -206,5 +207,6 @@ describe('linkParser', () => {
 	])(`入力が「%s」のとき、パースに失敗する`, (input) => {
 		const output = linkParser({ input })
 		expect(output.type).toEqual('Failure')
+		expect(output.state.position).toEqual(0)
 	})
 })
