@@ -23,6 +23,30 @@ describe('inlineParser', () => {
 			[
 				{ type: 'text', value: 'hello, *world*!!' },
 			]
+		],
+		[
+			'hello, [[world]] !!',
+			[
+				{ type: 'text', value: 'hello, ' },
+				{ type: 'internalLink', text: 'world', path: 'world', embedding: false },
+				{ type: 'text', value: ' !!' },
+			]
+		],
+		[
+			'hello, [[test|world]] !!',
+			[
+				{ type: 'text', value: 'hello, ' },
+				{ type: 'internalLink', text: 'world', path: 'test', embedding: false },
+				{ type: 'text', value: ' !!' },
+			]
+		],
+		[
+			'hello, [world](http://example.com) !!',
+			[
+				{ type: 'text', value: 'hello, ' },
+				{ type: 'link', url: 'http://example.com', children: [{ type: 'text', value: 'world' }] },
+				{ type: 'text', value: ' !!' },
+			]
 		]
 	])('入力が%sのとき、パースに成功する', (input, expected) => {
 		const output = inlineParser({ input })
