@@ -4,11 +4,15 @@ import { eof, map, orParser, pipe, repeatTill } from '@dykarohora/funser'
 import { codeSpansParser } from './codeSpansParser.js'
 import { textParser } from './textParser.js'
 import { escapeParser } from './escapeParser.js'
+import { linkParser } from './linkParser.js'
+import { internalLinkParser } from './internalLinkParser.js'
 
 export const inlineParser: Parser<InlineContent[]> =
 	pipe(
 		orParser(
 			escapeParser,
+			linkParser,
+			internalLinkParser,
 			codeSpansParser,
 			textParser
 		),

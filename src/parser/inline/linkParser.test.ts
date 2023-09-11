@@ -1,6 +1,5 @@
 import { linkParser } from './linkParser.js'
 
-
 describe('linkParser', () => {
 	it.each([
 		[
