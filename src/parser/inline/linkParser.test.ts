@@ -1,7 +1,7 @@
 import { linkParser } from './linkParser.js'
 
 describe('linkParser', () => {
-	it.each([
+	test.each([
 		[
 			'[hello](https://example.com)',
 			{

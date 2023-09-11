@@ -3,7 +3,7 @@ module.exports = {
 		browser: true,
 		es2021: true,
 	},
-	ignorePatterns: ['/dist/*', '/node_modules/*'],
+	ignorePatterns: ['/dist/*', '/node_modules/*', 'vite.config.ts'],
 	extends: 'xo',
 	overrides: [
 		{

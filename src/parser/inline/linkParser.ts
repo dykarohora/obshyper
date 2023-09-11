@@ -16,10 +16,10 @@ import {
 	string,
 	whitespace
 } from '@dykarohora/funser'
-import { createInlineParser } from './inlineParser.js'
 import { escapeParser } from './escapeParser.js'
 import { codeSpansParser } from './codeSpansParser.js'
 import { textParser } from './textParser.js'
+import { createInlineParser } from './createInlineParser.js'
 
 
 const brackets =
