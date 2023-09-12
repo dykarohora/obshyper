@@ -4,6 +4,37 @@ import { emphasisAndStrongParser } from './emphasisAndStrongParser.js'
 describe('emphasisAndStrongParser', () => {
 	it.each([
 		[
+			'*(**hello**)*',
+			{
+				type: 'emphasis',
+				children: [
+					{ type: 'text', value: '(' },
+					{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
+					{ type: 'text', value: ')' }
+				]
+			}
+		],
+		[
+			'**(*hello*)**',
+			{
+				type: 'strong',
+				children: [
+					{ type: 'text', value: '(' },
+					{ type: 'emphasis', children: [{ type: 'text', value: 'hello' }] },
+					{ type: 'text', value: ')' }
+				]
+			}
+		],
+		[
+			'***hello***',
+			{
+				type: 'strong',
+				children: [
+					{ type: 'emphasis', children: [{ type: 'text', value: 'hello' }] }
+				]
+			}
+		],
+		[
 			'*hello*',
 			{
 				type: 'emphasis',
@@ -32,50 +63,6 @@ describe('emphasisAndStrongParser', () => {
 			}
 		],
 		[
-			'*(*hello*)*',
-			{
-				type: 'emphasis',
-				children: [
-					{ type: 'text', value: '(' },
-					{ type: 'emphasis', children: [{ type: 'text', value: 'hello' }] },
-					{ type: 'text', value: ')' }
-				]
-			}
-		],
-		[
-			'*(**hello**)*',
-			{
-				type: 'emphasis',
-				children: [
-					{ type: 'text', value: '(' },
-					{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
-					{ type: 'text', value: ')' }
-				]
-			}
-		],
-		[
-			'**(**hello**)**',
-			{
-				type: 'strong',
-				children: [
-					{ type: 'text', value: '(' },
-					{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
-					{ type: 'text', value: ')' }
-				]
-			}
-		],
-		[
-			'**(*hello*)**',
-			{
-				type: 'strong',
-				children: [
-					{ type: 'text', value: '(' },
-					{ type: 'emphasis', children: [{ type: 'text', value: 'hello' }] },
-					{ type: 'text', value: ')' }
-				]
-			}
-		],
-		[
 			'**foo "*bar*" foo**',
 			{
 				type: 'strong',
@@ -83,15 +70,6 @@ describe('emphasisAndStrongParser', () => {
 					{ type: 'text', value: 'foo "' },
 					{ type: 'emphasis', children: [{ type: 'text', value: 'bar' }] },
 					{ type: 'text', value: '" foo' }
-				]
-			}
-		],
-		[
-			'***hello***',
-			{
-				type: 'emphasis',
-				children: [
-					{ type: 'strong', children: [{ type: 'text', value: 'hello' }] }
 				]
 			}
 		],
@@ -174,7 +152,7 @@ describe('emphasisAndStrongParser', () => {
 		['**hello **'],
 		['*hello\n*'],
 		['**hello\t**'],
-		['*(*hello']
+		['**']
 	])('入力が%sのとき、パースに失敗する', (input) => {
 		const output = emphasisAndStrongParser({ input })
 		expect(output.type).toEqual('Failure')

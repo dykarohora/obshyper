@@ -40,14 +40,14 @@ describe('headingParser', () => {
 		// throw new Error('Not implemented')
 	})
 
-	//
-	// it('見出し名はインラインコンテンツとしてパースされる', () => {
-	// 	const input = '# foo *bar* \*baz\*'
-	// 	const result = headingParser({ input })
-	//
-	// 	// TODO インラインコンテンツパーサを実装する
-	// 	throw new Error('Not implemented')
-	// })
+
+	it('見出し名はインラインコンテンツとしてパースされる', () => {
+		const input = '# foo [[bar]] [b`a`z](http://example.com)'
+		const result = headingParser({ input })
+
+		// TODO インラインコンテンツパーサを実装する
+		throw new Error('Not implemented')
+	})
 
 	it('見出し名の前後にあるタブとスペースは無視される', () => {
 		const input = '#    \t foo   \t   '
