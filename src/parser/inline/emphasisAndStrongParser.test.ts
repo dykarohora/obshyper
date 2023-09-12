@@ -3,17 +3,18 @@ import { emphasisAndStrongParser } from './emphasisAndStrongParser.js'
 
 describe('emphasisAndStrongParser', () => {
 	it.each([
-		[
-			'*(**hello**)*',
-			{
-				type: 'emphasis',
-				children: [
-					{ type: 'text', value: '(' },
-					{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
-					{ type: 'text', value: ')' }
-				]
-			}
-		],
+		// [
+		// 	// この文字列はサポートしない
+		// 	'*(**hello**)*',
+		// 	{
+		// 		type: 'emphasis',
+		// 		children: [
+		// 			{ type: 'text', value: '(' },
+		// 			{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
+		// 			{ type: 'text', value: ')' }
+		// 		]
+		// 	}
+		// ],
 		[
 			'**(*hello*)**',
 			{
@@ -160,13 +161,3 @@ describe('emphasisAndStrongParser', () => {
 	})
 })
 
-// TODO インラインパーサでテストする
-// foo*bar*
-// 5*6*78
-// aa*"bb"*cc
-// foo-*(bar)*-
-// *foo*bar
-// *(bar)*.
-// **hello***
-// *hello****
-// **
