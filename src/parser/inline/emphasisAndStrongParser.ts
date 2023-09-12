@@ -1,4 +1,4 @@
-import type { Parser, ParserInput } from '@dykarohora/funser/types'
+import type { Parser, ParserInput, Success } from '@dykarohora/funser/types'
 import type { Emphasis, Strong } from '../../types/index.js'
 import type { ParserOutput } from '@dykarohora/funser/types'
 import {
@@ -22,14 +22,21 @@ type StringToChars<S extends string> = S extends `${infer T}${infer Rest}`
 
 type EscapeChars = `\\${StringToChars<'!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~'>}`
 
-function escape({ input, position = 0 }: ParserInput): ParserOutput<EscapeChars> {
-	return pipe(
+const escape: Parser<EscapeChars> =
+	pipe(
 		seqParser(
 			anyCharOf('\\'),
 			anyCharOf('!"#$%&\'()*+,-./:;<=>?@[]\\^_`{|}~')
 		),
 		map(chars => chars.join('') as EscapeChars)
-	)({ input, position })
+	)
+
+const noTrailingWhitespace = ({ value }: Success<string[]>): true | { reason: string } => {
+	const tail = value.at(-1)
+
+	return tail && (whitespace({ input: tail }).type === 'Success')
+		? { reason: 'whitespace is not allowed at the end of strong and emphasis', }
+		: true
 }
 
 function emphasis({ input, position = 0 }: ParserInput): ParserOutput<Emphasis> {
@@ -43,13 +50,7 @@ function emphasis({ input, position = 0 }: ParserInput): ParserOutput<Emphasis> 
 					seqParser(not(string('**')), string('*')),
 					{ includeTillResult: false, consumption: true }
 				),
-				validate(({ value }) => {
-					const tail = value.at(-1)
-
-					return tail && (whitespace({ input: tail }).type === 'Success')
-						? { reason: 'whitespace is not allowed at the end of strong and emphasis', }
-						: true
-				})
+				validate(noTrailingWhitespace)
 			)
 		),
 		map(([, , chars]) => {
@@ -74,14 +75,11 @@ function strong({ input, position = 0 }: ParserInput): ParserOutput<Strong> {
 			not(whitespace),
 			pipe(
 				orParser(escape, anyChar),
-				repeatTill(string('**'), { includeTillResult: false, consumption: true }),
-				validate(({ value }) => {
-					const tail = value.at(-1)
-
-					return tail && (whitespace({ input: tail }).type === 'Success')
-						? { reason: 'whitespace is not allowed at the end of strong and emphasis', }
-						: true
-				})
+				repeatTill(
+					string('**'),
+					{ includeTillResult: false, consumption: true }
+				),
+				validate(noTrailingWhitespace)
 			)
 		),
 		map(([, , chars]) => {
@@ -106,14 +104,11 @@ function emphasisAndStrong({ input, position = 0 }: ParserInput): ParserOutput<S
 			not(whitespace),
 			pipe(
 				orParser(escape, anyChar),
-				repeatTill(string('***'), { includeTillResult: false, consumption: true }),
-				validate(({ value }) => {
-					const tail = value.at(-1)
-
-					return tail && (whitespace({ input: tail }).type === 'Success')
-						? { reason: 'whitespace is not allowed at the end of strong and emphasis', }
-						: true
-				})
+				repeatTill(
+					string('***'),
+					{ includeTillResult: false, consumption: true }
+				),
+				validate(noTrailingWhitespace)
 			)
 		),
 		map(([, , chars]) => {
