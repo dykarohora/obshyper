@@ -25,11 +25,16 @@ export type InternalLink = {
 	type: 'internalLink'
 	path: string
 	text: string
-	embedding:boolean
+	embedding: boolean
 }
 
 export type Strong = {
 	type: 'strong'
+	children: InlineContent[]
+}
+
+export type Emphasis = {
+	type: 'emphasis'
 	children: InlineContent[]
 }
 
@@ -40,5 +45,6 @@ export type InlineContent =
 	| Text
 	| CodeSpans
 	| Strong
+	| Emphasis
 	| Link
 	| InternalLink
