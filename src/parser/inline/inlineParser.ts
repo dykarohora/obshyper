@@ -1,4 +1,4 @@
-import type { Parser } from '@dykarohora/funser/types'
+import type { ParserInput, ParserOutput } from '@dykarohora/funser/types'
 import type { InlineContent } from '../../types/index.js'
 import { eof, map, orParser, pipe, repeatTill } from '@dykarohora/funser'
 import { codeSpansParser } from './codeSpansParser.js'
@@ -6,13 +6,15 @@ import { textParser } from './textParser.js'
 import { escapeParser } from './escapeParser.js'
 import { linkParser } from './linkParser.js'
 import { internalLinkParser } from './internalLinkParser.js'
+import { emphasisAndStrongParser } from './emphasisAndStrongParser.js'
 
-export const inlineParser: Parser<InlineContent[]> =
-	pipe(
+export function inlineParser({ input, position = 0 }: ParserInput): ParserOutput<InlineContent[]> {
+	return pipe(
 		orParser(
 			escapeParser,
 			linkParser,
 			internalLinkParser,
+			emphasisAndStrongParser,
 			codeSpansParser,
 			textParser
 		),
@@ -26,7 +28,7 @@ export const inlineParser: Parser<InlineContent[]> =
 
 						if (tail && tail.type === 'text' && inline.type === 'text') {
 							acc.splice(-1, 1, {
-								type: 'text',
+								type: 'text' as const,
 								value: tail.value + inline.value
 							})
 						} else {
@@ -38,5 +40,5 @@ export const inlineParser: Parser<InlineContent[]> =
 					[]
 				)
 		)
-	)
-
+	)({ input, position })
+}
