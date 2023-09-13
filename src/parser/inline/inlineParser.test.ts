@@ -3,6 +3,39 @@ import { inlineParser } from './inlineParser.js'
 describe('inlineParser', () => {
 	it.each([
 		[
+			'`foo``bar``',
+			[
+				{ type: 'text', value: '`foo' },
+				{ type: 'codeSpans', value: 'bar' },
+			]
+		],
+		[
+			'`<a href="`">`',
+			[
+				{ type: 'codeSpans', value: '<a href="' },
+				{ type: 'text', value: '">`' }
+			]
+		],
+		[
+			'`foo',
+			[
+				{ type: 'text', value: '`foo' }
+			]
+		],
+		[
+			'```foo``',
+			[
+				{ type: 'text', value: '```foo``' }
+			]
+		],
+		[
+			'`<http://foo.bar.`baz>`',
+			[
+				{ type: 'codeSpans', value: '<http://foo.bar.' },
+				{ type: 'text', value: 'baz>`' }
+			]
+		],
+		[
 			'**hello****',
 			[
 				{ type: 'strong', children: [{ type: 'text', value: 'hello' }] },
