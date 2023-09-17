@@ -3,6 +3,24 @@ import { linkParser } from './linkParser.js'
 describe('linkParser', () => {
 	test.each([
 		[
+			'[link](   /uri\n  "title"  )',
+			{
+				type: 'link',
+				url: '/uri',
+				title: 'title',
+				children: [{ type: 'text', value: 'link' }]
+			}
+		],
+		[
+			'[link](   /uri  "title"  )',
+			{
+				type: 'link',
+				url: '/uri',
+				title: 'title',
+				children: [{ type: 'text', value: 'link' }]
+			}
+		],
+		[
 			'[hello](https://example.com)',
 			{
 				type: 'link',
@@ -94,15 +112,6 @@ describe('linkParser', () => {
 			}
 		],
 		[
-			'[link](   /uri\n  "title"  )',
-			{
-				type: 'link',
-				url: '/uri',
-				title: 'title',
-				children: [{ type: 'text', value: 'link' }]
-			}
-		],
-		[
 			'[he`ll`o](https://example.com)',
 			{
 				type: 'link',
@@ -116,8 +125,6 @@ describe('linkParser', () => {
 		],
 		[
 			'[foo*](/uri)',
-			// TODO 強調よりも優先させること
-			// '*[foo*](/uri)',
 			{
 				type: 'link',
 				url: '/uri',
@@ -126,60 +133,6 @@ describe('linkParser', () => {
 				]
 			}
 		],
-
-
-		// [
-		// 	'[link](foo(and(bar)))',
-		// 	{
-		// 		type: 'link',
-		// 		url: 'foo(and(bar))',
-		// 		children: [{ type: 'text', value: 'link' }]
-		// 	}
-		// ],
-		// [
-		// 	'[link](foo\\(and\\(bar\\))',
-		// 	{
-		// 		type: 'link',
-		// 		url: 'foo(and(bar)',
-		// 		children: [{ type: 'text', value: 'link' }]
-		// 	}
-		// ],
-		// [
-		// 	'[link](foo%20b&auml;)',
-		// 	{
-		// 		type: 'link',
-		// 		url: 'foo%20b%C3%A4',
-		// 		children: [{ type: 'text', value: 'link' }]
-		// 	}
-		// ],
-		// [
-		// 	'[link](/url \'title "and" title\')',
-		// 	{
-		// 		type: 'link',
-		// 		url: '/url',
-		// 		title: 'title &quot;and&quot; title',
-		// 		children: [{ type: 'text', value: 'link' }]
-		// 	}
-		// ],
-		// [
-		// 	'[link[bar]foo](/uri)',
-		// 	{
-		// 		type: 'link',
-		// 		url: '/uri',
-		// 		children: [{ type: 'text', value: 'link[bar]foo' }]
-		// 	}
-		// ],
-		// [
-		// 	'[link [foo [bar]]](/uri)',
-		// 	{
-		// 		type: 'link',
-		// 		url: '/uri',
-		// 		children: [{ type: 'text', value: 'link [foo [bar]]' }]
-		// 	}
-		// ],
-
-		// TODO '[link [bar](/uri)'
-		// TODO '[link \[bar](/uri)'
 	])('入力が「%s」のとき、パースに成功する', (input, expected) => {
 		const output = linkParser({ input })
 
@@ -196,13 +149,9 @@ describe('linkParser', () => {
 		['[hello] (/my url)'],
 		['[hello](foo\nbar)'],
 		['[hello](<foo\nbar>)'],
-		// ['[link](<foo\\>)'],  // TODO
-		// ['[link](foo(and(bar))'], // TODO
 		['[[link]](/uri)'],
-		// ['[foo`](/uri)`'], // TODP
 		['[link](/url "title "and" title")'],
-		// ['`[foo`](/uri)'] // TODO,
-		['[link] bar](/uri)']
+		['[link] bar](/uri)'],
 	])(`入力が「%s」のとき、パースに失敗する`, (input) => {
 		const output = linkParser({ input })
 		expect(output.type).toEqual('Failure')

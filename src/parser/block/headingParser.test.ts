@@ -40,13 +40,54 @@ describe('headingParser', () => {
 		// throw new Error('Not implemented')
 	})
 
-
 	it('見出し名はインラインコンテンツとしてパースされる', () => {
 		const input = '# foo [[bar]] [b`a`z](http://example.com)'
 		const result = headingParser({ input })
 
-		// TODO インラインコンテンツパーサを実装する
-		throw new Error('Not implemented')
+		if(result.type === 'Failure') {
+			throw new Error('test failed')
+		}
+
+		const expected = {
+			'type': 'heading',
+			'depth': 1,
+			'children': [
+				{
+					'type': 'text',
+					'value': 'foo '
+				},
+				{
+					'type': 'internalLink',
+					'path': 'bar',
+					'text': 'bar',
+					'embedding': false
+				},
+				{
+					'type': 'text',
+					'value': ' '
+				},
+				{
+					'type': 'link',
+					'url': 'http://example.com',
+					'children': [
+						{
+							'type': 'text',
+							'value': 'b'
+						},
+						{
+							'type': 'codeSpans',
+							'value': 'a'
+						},
+						{
+							'type': 'text',
+							'value': 'z'
+						}
+					]
+				}
+			]
+		}
+
+		expect(result.value).toEqual(expected)
 	})
 
 	it('見出し名の前後にあるタブとスペースは無視される', () => {

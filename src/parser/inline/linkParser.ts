@@ -83,62 +83,28 @@ const dest2 =
 
 const linkDestination = orParser(dest1, dest2)
 
-export const titleText1 =
+const title = (delimiter: '"' | '\'' | '(') =>
 	pipe(
-		anyCharOf('"'),
+		anyCharOf(delimiter),
 		seq(
 			pipe(
 				orParser(
-					string('\\"'),
-					noCharOf('"\\')
+					string(`\\${delimiter === '(' ? ')' : delimiter}`),
+					noCharOf(`\\${delimiter === '(' ? ')' : delimiter}`)
 				),
 				repeat(),
 				map(chars => chars.join(''))
 			),
-			anyCharOf('"')
-		),
+			anyCharOf(delimiter === '(' ? ')' : delimiter)
+		)
 	)
-
-export const titleText2 =
-	pipe(
-		anyCharOf('\''),
-		seq(
-			pipe(
-				orParser(
-					string('\\\''),
-					noCharOf('\\\'')
-				),
-				repeat(),
-				map(chars => chars.join(''))
-			),
-			anyCharOf('\''),
-		),
-	)
-
-export const titleText3 =
-	pipe(
-		anyCharOf('('),
-		seq(
-			pipe(
-				orParser(
-					string('\\)'),
-					string('\\'),
-					noCharOf(')\\')
-				),
-				repeat(),
-				map(chars => chars.join(''))
-			),
-			anyCharOf(')'),
-		),
-	)
-
 
 const linkTitle =
 	pipe(
 		whitespace,
 		repeat({ min: 1 }),
 		seq(
-			orParser(titleText1, titleText2, titleText3),
+			orParser(title('"'), title('\''), title('('))
 		)
 	)
 
@@ -155,11 +121,19 @@ export const linkParser: Parser<Link> =
 			anyCharOf('['),
 			linkText,
 			string(']('),
+			pipe(
+				whitespace,
+				repeat(),
+			),
 			linkDestination,
 			option(linkTitle),
+			pipe(
+				whitespace,
+				repeat()
+			),
 			string(')')
 		),
-		map(([, link, , url, t,]) => {
+		map(([, link,, , url, t,]) => {
 			const result = inlineTextParser({ input: link })
 
 			if (result.type === 'Failure') {

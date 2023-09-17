@@ -3,6 +3,20 @@ import { inlineParser } from './inlineParser.js'
 describe('inlineParser', () => {
 	it.each([
 		[
+			'*[foo*](/uri)',
+			[
+				{ type: 'emphasis', children: [{ type: 'text', value: '[foo' }] },
+				{ type: 'text', value: '](/uri)' }
+			]
+		],
+		[
+			'[link [bar](/uri)',
+			[
+				{ type: 'text', value: '[link ' },
+				{ type: 'link', url: '/uri', children: [{ type: 'text', value: 'bar' }] },
+			]
+		],
+		[
 			'`foo``bar``',
 			[
 				{ type: 'text', value: '`foo' },
