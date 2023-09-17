@@ -4,6 +4,12 @@ export type Heading = {
 	children: InlineContent[]
 }
 
+export type FenceCodeBlock = {
+	type: 'code',
+	lang?: string,
+	value: string
+}
+
 export type Text = {
 	type: 'text'
 	value: string

@@ -7,6 +7,7 @@ describe('CodeSpansParser', () => {
 		['`a`', 'a', 3],
 		['`foo`', 'foo', 5],
 		['``foo``', 'foo', 7],
+		['```foo```', 'foo', 9],
 		['`` foo ` bar ``', 'foo ` bar', 15],
 		['` `` `', '``', 6],
 		['`  ``  `', ' `` ', 8],
