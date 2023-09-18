@@ -67,7 +67,7 @@ export const headingParser: Parser<Heading> =
 				({ input: contentStr?.replace(/(?<=\s)#+$/, '').trim() ?? '' })
 
 			if (contentParseResult.type === 'Failure') {
-				throw new Error(`[Bug] inlineParser failed: ${contentParseResult.reason}`)
+				throw new Error(`[Bug: headingParser] inlineParser failed: ${contentParseResult.reason}`)
 			}
 
 			return {

@@ -137,7 +137,7 @@ export const linkParser: Parser<Link> =
 			const result = inlineTextParser({ input: link })
 
 			if (result.type === 'Failure') {
-				throw new Error(`[Bug] linkTextParser failed: ${result.reason}`)
+				throw new Error(`[Bug: linkParser] linkTextParser failed: ${result.reason}`)
 			}
 
 			if (t.type === 'None') {

@@ -56,7 +56,7 @@ function base(delimiter: '*' | '**' | '***'): Parser<Emphasis | Strong> {
 		map(([, , chars]) => {
 			const output = inlineParser({ input: chars.join('') })
 			if (output.type === 'Failure') {
-				throw new Error(`[bug]Unexpected error: ${output.reason}`)
+				throw new Error(`[Bug: emphasisAndStrongParser]Unexpected error: ${output.reason}`)
 			}
 
 			switch (delimiter) {
