@@ -10,6 +10,11 @@ export type FenceCodeBlock = {
 	value: string
 }
 
+export type Paragraph = {
+	type: 'paragraph'
+	children: InlineContent[]
+}
+
 export type Text = {
 	type: 'text'
 	value: string
@@ -46,6 +51,7 @@ export type Emphasis = {
 
 export type BlockContent =
 	| Heading
+	| FenceCodeBlock
 
 export type InlineContent =
 	| Text
