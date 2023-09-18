@@ -4,7 +4,7 @@ import {
 	anyChar,
 	eof,
 	map,
-	newline,
+	newline, noCharOf,
 	option,
 	orParser,
 	pipe,
@@ -17,7 +17,7 @@ import {
 
 const langParser =
 	pipe(
-		anyChar,
+		noCharOf('`'),
 		repeatTill(newline, { consumption: false, includeTillResult: false }),
 		map(chars => chars.join(''))
 	)
