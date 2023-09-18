@@ -4,6 +4,15 @@ import { internalLinkParser } from './internalLinkParser.js'
 describe('internalLinkParser', () => {
 	it.each([
 		[
+			'[[テクノロジー/文字コード/サロゲートペア|サロゲートペア]]',
+			{
+				type: 'internalLink',
+				text: 'サロゲートペア',
+				path: 'テクノロジー/文字コード/サロゲートペア',
+				embedding: false
+			}
+		],
+		[
 			'[[hello]]',
 			{
 				type: 'internalLink',

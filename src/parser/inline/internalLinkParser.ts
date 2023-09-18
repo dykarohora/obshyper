@@ -4,7 +4,7 @@ import { anyChar, map, noCharOf, option, orParser, pipe, repeatTill, seqParser, 
 
 const path =
 	pipe(
-		noCharOf('#^[]/:\\'),
+		noCharOf('#^[]:\\'),
 		repeatTill(orParser(string('|'), string(']]')), { includeTillResult: false, consumption: false }),
 		map(chars => chars.join(''))
 	)
