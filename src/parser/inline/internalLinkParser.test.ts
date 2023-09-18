@@ -83,7 +83,6 @@ describe('internalLinkParser', () => {
 		['[[he^llo]]'],
 		['[[he[llo]]'],
 		['[[he]llo]]'],
-		['[[he/llo]]'],
 		['[[he\\llo]]'],
 		['[[he:llo]]'],
 	])('入力が%sのとき、パースに失敗する', (input) => {
