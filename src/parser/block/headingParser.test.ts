@@ -44,7 +44,7 @@ describe('headingParser', () => {
 		const input = '# foo [[bar]] [b`a`z](http://example.com)'
 		const result = headingParser({ input })
 
-		if(result.type === 'Failure') {
+		if (result.type === 'Failure') {
 			throw new Error('test failed')
 		}
 
@@ -163,6 +163,23 @@ describe('headingParser', () => {
 		}
 
 		expect(result).toEqual(expected)
+	})
+
+
+	it('見出しがある行末まで入力として消費する', () => {
+		const input = `## hello
+
+hello, world
+`
+		const result = headingParser({ input })
+		if (result.type === 'Failure') {
+			throw new Error('test failed')
+		}
+
+		const remain = '\nhello, world\n'
+
+		expect(result.state.position).toEqual(9)
+		expect(input.slice(result.state.position)).toEqual(remain)
 	})
 
 	it.each([
