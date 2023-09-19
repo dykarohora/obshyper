@@ -1,3 +1,5 @@
+// Block
+
 export type Heading = {
 	type: 'heading'
 	depth: 1 | 2 | 3 | 4 | 5 | 6
@@ -14,6 +16,13 @@ export type Paragraph = {
 	type: 'paragraph'
 	children: InlineContent[]
 }
+
+export type Blockquote = {
+	type: 'blockquote',
+	children: BlockContent[]
+}
+
+// Inline
 
 export type Text = {
 	type: 'text'
@@ -52,6 +61,8 @@ export type Emphasis = {
 export type BlockContent =
 	| Heading
 	| FenceCodeBlock
+	| Blockquote
+	| Paragraph
 
 export type InlineContent =
 	| Text
