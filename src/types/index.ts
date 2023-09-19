@@ -22,6 +22,12 @@ export type Blockquote = {
 	children: BlockContent[]
 }
 
+export type Admotion = {
+	type: 'admotion'
+	adType: 'info' | 'warning' | 'danger' | 'check'
+	children: BlockContent[]
+}
+
 // Inline
 
 export type Text = {
@@ -61,6 +67,7 @@ export type Emphasis = {
 export type BlockContent =
 	| Heading
 	| FenceCodeBlock
+	| Admotion
 	| Blockquote
 	| Paragraph
 

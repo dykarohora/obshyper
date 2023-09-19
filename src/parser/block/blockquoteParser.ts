@@ -14,8 +14,7 @@ import {
 } from '@dykarohora/funser'
 import { blockParser } from './blockParser.js'
 
-
-function blockquoteLine({ input, position = 0 }: ParserInput): ParserOutput<string> {
+export function blockquoteLine({ input, position = 0 }: ParserInput): ParserOutput<string> {
 	return pipe(
 		seqParser(
 			pipe(
