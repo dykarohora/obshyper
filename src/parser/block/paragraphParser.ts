@@ -2,7 +2,8 @@ import type { Parser } from '@dykarohora/funser/types'
 import type { Paragraph } from '../../types/index.js'
 import {
 	anyChar,
-	anyCharOf, eof,
+	anyCharOf,
+	eof,
 	map,
 	newline,
 	noCharOf,
@@ -36,17 +37,27 @@ const fence =
 		noCharOf('`'),
 	)
 
+const blockquote =
+	seqParser(
+		pipe(
+			anyCharOf(' '),
+			repeat({ min: 0, max: 3 }),
+		),
+		anyCharOf('>'),
+	)
+
 export const paragraphParser: Parser<Paragraph> =
 	pipe(
 		seqParser(
 			not(heading),
 			not(fence),
+			not(blockquote),
 			pipe(
 				anyChar,
 				repeatTill(orParser(newline, eof), { consumption: true, includeTillResult: false })
 			)
 		),
-		map(([, , chars]) => {
+		map(([, , , chars]) => {
 			const result = inlineParser({ input: chars.join('') })
 
 			if (result.type === 'Failure') {

@@ -84,6 +84,16 @@ describe('blockquoteParser', () => {
 		expect(result.value).toEqual(expected)
 	})
 
+	it('行頭のスペースは3つまでなら引用ブロックとみなされる', () => {
+		const validInput = '   > hello'
+		const validInputResult = blockquoteParser({ input: validInput })
+		expect(validInputResult.type).toEqual('Success')
+
+		const invalidInput = '    > hello'
+		const invalidInputResult = blockquoteParser({ input: invalidInput })
+		expect(invalidInputResult.type).toEqual('Failure')
+	})
+
 	it('多段の引用ブロックをパースできる', () => {
 		const input =
 			`> hello

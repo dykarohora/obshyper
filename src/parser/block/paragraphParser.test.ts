@@ -49,6 +49,8 @@ describe('paragraphParser', () => {
 		['   ### test\n\nhello, world'],
 		['```js\nhello, world\n```'],
 		['```\nhello, world\n```'],
+		['> hello, world'],
+		['   > hello, world'],
 	])('入力が%sの場合はパースに失敗する', (input) => {
 		const result = paragraphParser({ input })
 
