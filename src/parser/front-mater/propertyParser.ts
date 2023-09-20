@@ -1,10 +1,12 @@
 import type { Parser } from '@dykarohora/funser/types'
 import {
 	anyChar,
-	anyCharOf, eof,
-	map,
+	eof,
 	newline,
-	option, orParser,
+	anyCharOf,
+	map,
+	option,
+	orParser,
 	pipe,
 	repeat,
 	repeatTill,
@@ -33,8 +35,8 @@ export const propertyParser =
 					repeatTill(orParser(newline, eof), { consumption: true, includeTillResult: false }),
 				)
 			),
-			map(([, , value]) => ({
+			map(([, , chars]) => ({
 				key,
-				value: value.join('')
+				value: chars.join('')
 			}))
 		)
