@@ -1,3 +1,13 @@
+// Front matter
+
+export type FrontMatter = {
+	title: string
+	tags: string[]
+	aliases: string[]
+	createdAt: Date
+	updatedAt: Date
+}
+
 // Block
 
 export type Heading = {
