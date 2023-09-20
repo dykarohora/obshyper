@@ -14,7 +14,7 @@ import {
 	string
 } from '@dykarohora/funser'
 
-type Property<K extends string> = {
+export type Property<K extends string> = {
 	key: K
 	value: string
 }

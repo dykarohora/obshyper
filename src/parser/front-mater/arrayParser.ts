@@ -14,7 +14,7 @@ import {
 	string
 } from '@dykarohora/funser'
 
-type ArrayProperty<K extends string> = {
+export type ArrayProperty<K extends string> = {
 	key: K
 	value: string[]
 }
